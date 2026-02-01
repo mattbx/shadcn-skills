@@ -1,0 +1,8 @@
+{
+  "name": "shadcn-skills",
+  "description": "Skills for building better shadcn/ui applications. Includes component discovery (search 1,500+ existing components before building) and component review (audit against shadcn patterns and theme styles).",
+  "skills": [
+    "shadcn-component-discovery",
+    "shadcn-component-review"
+  ]
+}
