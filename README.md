@@ -46,18 +46,28 @@ Agent: ## Component Review
 
 ## Installation
 
-### Claude Code
+### npx skills (Recommended)
+
+```bash
+# Install both skills to any supported agent
+npx skills add mattbx/shadcn-skills
+
+# Or list available skills first
+npx skills add mattbx/shadcn-skills --list
+
+# Install to specific agents
+npx skills add mattbx/shadcn-skills -a claude-code -a cursor
+```
+
+### Claude Code Plugin
 
 ```bash
 # Add the marketplace
-/plugin marketplace add YOUR_USERNAME/shadcn-skills
+/plugin marketplace add mattbx/shadcn-skills
 
 # Install both skills
 /plugin install shadcn-component-discovery
 /plugin install shadcn-component-review
-
-# Or install just one
-/plugin install shadcn-component-discovery
 ```
 
 ### Manual Installation
@@ -66,13 +76,15 @@ Copy the skill folders from `skills/` to:
 - `~/.claude/skills/` (personal - all projects)
 - `.claude/skills/` (project-specific)
 
-### Other Tools
+### Supported Tools
 
 These skills follow the [Agent Skills](https://agentskills.io) open standard and work with:
 - Claude Code
 - Cursor
 - OpenAI Codex CLI
 - Windsurf
+- Gemini CLI
+- GitHub Copilot
 - And other compatible tools
 
 ## Workflow: Discovery → Build → Review
