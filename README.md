@@ -133,6 +133,7 @@ See `skills/shadcn-component-review/references/theme-styles.md` for detailed pat
 ## Contributing
 
 PRs welcome! Ideas:
+- UX suggestions
 - New registry additions
 - Additional theme patterns
 - Improved search mappings
