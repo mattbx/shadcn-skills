@@ -12,7 +12,7 @@ Reference guide for shadcn's five official visual styles (Vega, Nova, Maia, Lyra
 | **Lyra** | Standard | Boxy / sharp | Developer tools, mono fonts |
 | **Mira** | Dense | Compact | Admin dashboards, power users |
 
-Styles are applied at init time (`npx shadcn@latest create`) or switched via preset codes (`npx shadcn@latest apply --preset <code>` in CLI v4+). The chosen style is stored in `components.json`.
+Styles are applied at init time (`npx shadcn@latest init`) or switched via preset codes (`npx shadcn@latest apply --preset <code>` in CLI v4+). The chosen style is stored in `components.json`.
 
 ## Style-by-Style
 

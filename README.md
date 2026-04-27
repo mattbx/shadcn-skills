@@ -22,7 +22,7 @@ Searches the shadcn component ecosystem before building any custom UI. Activates
 
 **Example:**
 
-```
+```text
 User: "Add a data table to show user accounts"
 
 Agent: Before building custom, I found existing options:
@@ -52,7 +52,7 @@ Reviews custom components against shadcn design patterns. Activates proactively 
 
 **Example:**
 
-```
+```text
 User: "Review this component"
 
 Agent: ## Review: <PageHeader />

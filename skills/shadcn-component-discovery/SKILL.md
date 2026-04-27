@@ -56,7 +56,7 @@ Three paths depending on tool availability. The **official shadcn MCP** is stron
 
 If the shadcn MCP server is running (configured via `npx shadcn@latest mcp init` or equivalent), use its tools directly:
 
-```
+```text
 1. mcp__shadcn__search_items_in_registries
    - registries: ["@shadcn", "@blocks", "@animate-ui", "@reui", "@diceui"]
    - query: "<search term>"

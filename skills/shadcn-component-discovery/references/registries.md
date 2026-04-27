@@ -169,7 +169,7 @@ Paid or private registries take a config object with headers:
 {
   "registries": {
     "@shadcnblocks": {
-      "url": "https://shadcnblocks.com/r/{name}",
+      "url": "https://shadcnblocks.com/r/{name}.json",
       "headers": {
         "Authorization": "Bearer ${SHADCNBLOCKS_API_KEY}"
       }
