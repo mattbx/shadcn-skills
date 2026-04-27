@@ -1,234 +1,226 @@
-# shadcn Registry Catalog
+# shadcn-Compatible Registry Catalog
 
-Comprehensive catalog of shadcn-compatible registries organized by specialty.
+Curated catalog of registries that work with the shadcn CLI and MCP, organized by specialty. Recommendations here are for narrowing the field quickly — for an exhaustive live list, see the canonical aggregator at [shadcn.io/awesome/registries](https://www.shadcn.io/awesome/registries).
 
-## Core Registries (Recommended First)
+## Core Registries
 
-These registries are well-maintained and cover most use cases.
+Well-maintained registries that cover most project needs. Start here.
 
-### @shadcn (Official)
-- **Items:** 440+
-- **Focus:** Core UI primitives
-- **Quality:** Reference implementation
-- **URL:** https://ui.shadcn.com
-- **Best for:** Base components (Button, Input, Card, Dialog, etc.)
+### @shadcn — Official primitives
+**URL:** [ui.shadcn.com](https://ui.shadcn.com)
+**Focus:** Core UI primitives built on Radix or Base UI
+**Best for:** Buttons, inputs, cards, dialogs, tables, the foundational layer of any project
 
-### @blocks (Official)
-- **Items:** 100+
-- **Focus:** Pre-built page sections
-- **Quality:** Production-ready
-- **URL:** https://ui.shadcn.com/blocks
-- **Best for:** Dashboards, authentication pages, settings layouts, sidebars
+### @blocks — Official blocks
+**URL:** [ui.shadcn.com/blocks](https://ui.shadcn.com/blocks)
+**Focus:** Pre-built page sections using official primitives
+**Best for:** Dashboards, auth pages, sidebars, settings layouts — production-ready starting points
 
 ### @reui
-- **Items:** 700+
-- **Focus:** Advanced components and full apps
-- **Quality:** Production-ready
-- **URL:** https://reui.dev
-- **Best for:** Data grids, complex forms, full page templates, admin panels
+**URL:** [reui.io](https://reui.io)
+**Focus:** Advanced components and full app templates
+**Best for:** Data grids, complex forms, admin panels, full page templates beyond basic primitives
 
 ### @animate-ui
-- **Items:** 200+
-- **Focus:** Animated components with Motion
-- **Quality:** High polish
-- **URL:** https://animate-ui.com
-- **Best for:** Animated backgrounds, transitions, micro-interactions, polished UI
+**URL:** [animate-ui.com](https://animate-ui.com)
+**Focus:** Animated components built with Motion (formerly Framer Motion)
+**Best for:** Transitions, micro-interactions, animated backgrounds, polished UI
+
+### @aceternity
+**URL:** [ui.aceternity.com](https://ui.aceternity.com)
+**Focus:** Effect-heavy animated components and landing page elements
+**Best for:** Hero sections, 3D cards, spotlight effects, visually striking marketing pages
 
 ### @diceui
-- **Items:** 100+
-- **Focus:** Accessible components
-- **Quality:** WCAG compliant
-- **URL:** https://diceui.com
-- **Best for:** Accessibility-first projects, enterprise apps
+**URL:** [diceui.com](https://diceui.com)
+**Focus:** Accessibility-first components (React Aria based)
+**Best for:** Enterprise apps, WCAG-compliant projects, keyboard-heavy UIs
 
 ---
 
 ## Specialty Registries
 
-### AI & Chat Components
+### AI & Chat Interfaces
 
 | Registry | Focus | URL |
-|----------|-------|-----|
-| **AI Elements** | AI chat, messages, conversations | https://aielements.dev |
-| **Manifest UI** | ChatGPT-style apps | https://manifest-ui.com |
-| **assistant-ui** | AI assistant interfaces | https://assistant-ui.com |
+|---|---|---|
+| AI Elements | Radix-style primitives for AI chat, message threads, streaming | [aielements.dev](https://aielements.dev) |
+| assistant-ui | AI assistant interfaces with backend adapters (AI SDK, LangGraph, Mastra) | [assistant-ui.com](https://assistant-ui.com) |
+| Manifest UI | ChatGPT-style application patterns | [manifest-ui.com](https://manifest-ui.com) |
 
-**Search terms:** `chat`, `message`, `conversation`, `ai`, `assistant`, `streaming`
+**Search terms:** `chat`, `message`, `conversation`, `ai`, `assistant`, `streaming`, `thread`
 
 ### Animation & Motion
 
 | Registry | Focus | URL |
-|----------|-------|-----|
-| **Magic UI** | 150+ animated components | https://magicui.design |
-| **Cult UI** | Design engineer animations | https://cult-ui.com |
-| **Shadix UI** | Production-ready animations | https://shadix-ui.com |
-| **Motion Primitives** | Motion building blocks | https://motion-primitives.com |
+|---|---|---|
+| Magic UI | Animated components, especially landing-page focused | [magicui.design](https://magicui.design) |
+| Cult UI | Design-engineer animations and interactions | [cult-ui.com](https://cult-ui.com) |
+| Motion Primitives | Low-level motion building blocks | [motion-primitives.com](https://motion-primitives.com) |
+| Kokonut UI | Stylized animated UI components | [kokonutui.com](https://kokonutui.com) |
 
-**Search terms:** `animate`, `motion`, `transition`, `hover`, `entrance`
-
-### Voice & Audio
-
-| Registry | Focus | URL |
-|----------|-------|-----|
-| **ElevenLabs UI** | Voice agents, audio players, waveforms | https://elevenlabs.io |
-
-**Search terms:** `audio`, `voice`, `waveform`, `player`, `orb`
+**Search terms:** `animate`, `motion`, `transition`, `hover`, `entrance`, `particles`
 
 ### Marketing & Landing Pages
 
 | Registry | Focus | URL |
-|----------|-------|-----|
-| **Tailark** | Marketing blocks | https://tailark.com |
-| **Eldora UI** | Landing page components | https://eldoraui.com |
-| **HextaUI** | Extended blocks | https://hextaui.com |
+|---|---|---|
+| Tailark | Marketing-focused blocks | [tailark.com](https://tailark.com) |
+| Shadcnblocks | Premium block library with 1000+ blocks and templates (paid) | [shadcnblocks.com](https://shadcnblocks.com) |
+| Eldora UI | Landing page components | [eldoraui.com](https://eldoraui.com) |
+| HextaUI | Extended blocks and components | [hextaui.com](https://hextaui.com) |
 
 **Search terms:** `hero`, `cta`, `pricing`, `features`, `testimonial`, `landing`
 
 ### Data & Tables
 
 | Registry | Focus | URL |
-|----------|-------|-----|
-| **@reui** | Advanced data grids | https://reui.dev |
-| **TanCN** | TanStack Table integration | - |
+|---|---|---|
+| @reui | Advanced data grids with sorting/filtering/DnD | [reui.io](https://reui.io) |
 
-**Search terms:** `table`, `data-grid`, `column`, `sort`, `filter`, `pagination`
+**Search terms:** `table`, `data-grid`, `column`, `sort`, `filter`, `pagination`, `virtualized`
+
+**Note:** For very large or complex tables, `@shadcn/table` + TanStack Table is often the better path than a pre-built grid. The shadcn Data Table docs cover this pattern.
 
 ### Forms & Validation
 
 | Registry | Focus | URL |
-|----------|-------|-----|
-| **Shadcn Form Builder** | Form generation | https://shadcn-form-builder.vercel.app |
-| **FormCN** | Form components | - |
+|---|---|---|
+| @shadcn | Core form primitives (`form`, `input`, `field`, `field-group`, `input-group`) | [ui.shadcn.com](https://ui.shadcn.com) |
+| Shadcn Form Builder | Form-generation utilities | [shadcn-form-builder.vercel.app](https://shadcn-form-builder.vercel.app) |
 
-**Search terms:** `form`, `input`, `validation`, `field`, `submit`
+**Search terms:** `form`, `input`, `field`, `validation`, `submit`
 
-### Icons (Animated)
+### Voice & Audio
 
 | Registry | Focus | URL |
-|----------|-------|-----|
-| **pqoqubbw/icons** | Animated Lucide icons | https://icons.pqoqubbw.dev |
-| **heroicons-animated** | 316 animated heroicons | - |
+|---|---|---|
+| ElevenLabs UI | Voice agents, audio players, waveform visualizations | [elevenlabs.io](https://elevenlabs.io) |
 
-**Search terms:** `icon`, `animated-icon`
+**Search terms:** `audio`, `voice`, `waveform`, `player`, `orb`
 
 ### Style Variants
 
 | Registry | Style | URL |
-|----------|-------|-----|
-| **8bitcn** | Retro 8-bit pixel style | https://8bitcn.com |
-| **RetroUI** | Neobrutalism | https://retroui.dev |
-| **Neobrutalism UI** | Bold, brutalist | - |
-| **shadcn-glass-ui** | Glassmorphism (55 components) | - |
+|---|---|---|
+| 8bitcn | Retro 8-bit pixel style | [8bitcn.com](https://8bitcn.com) |
+| RetroUI | Neobrutalism | [retroui.dev](https://retroui.dev) |
+| Neobrutalism UI | Bold brutalist aesthetic | [neobrutalism.dev](https://neobrutalism.dev) |
 
 **Search terms:** `retro`, `brutalist`, `glass`, `pixel`, `8bit`
 
 ### Accessibility-First
 
 | Registry | Focus | URL |
-|----------|-------|-----|
-| **JollyUI** | React Aria based | https://jollyui.dev |
-| **Intent UI** | Accessible, customizable | https://intent-ui.com |
-| **Kibo UI** | Composable, accessible | https://kibo-ui.com |
+|---|---|---|
+| JollyUI | React Aria based | [jollyui.dev](https://jollyui.dev) |
+| Intent UI | Accessible, customizable | [intent-ui.com](https://intent-ui.com) |
+| Kibo UI | Composable, accessible patterns | [kibo-ui.com](https://kibo-ui.com) |
 
-**Search terms:** `accessible`, `aria`, `a11y`
+**Search terms:** `accessible`, `aria`, `a11y`, `keyboard`
 
----
+### Icons
 
-## Registry Search Strategy
+| Registry | Focus | URL |
+|---|---|---|
+| pqoqubbw/icons | Animated Lucide icons | [icons.pqoqubbw.dev](https://icons.pqoqubbw.dev) |
 
-### By Component Type
-
-| Looking for... | Search these registries first |
-|----------------|-------------------------------|
-| Basic UI | @shadcn |
-| Page layouts | @blocks, @reui |
-| Data tables | @reui, @shadcn |
-| Animations | @animate-ui, Magic UI, Cult UI |
-| AI/Chat | AI Elements, Manifest UI, assistant-ui |
-| Forms | @shadcn, Shadcn Form Builder |
-| Auth pages | @blocks |
-| Dashboards | @blocks, @reui |
-| Marketing | Tailark, Eldora UI |
-| Audio/Voice | ElevenLabs UI |
-
-### By Project Type
-
-| Building... | Recommended registries |
-|-------------|------------------------|
-| SaaS dashboard | @blocks, @reui, @shadcn |
-| Marketing site | Tailark, Eldora UI, Magic UI |
-| AI application | AI Elements, assistant-ui, @animate-ui |
-| Admin panel | @reui, @blocks, @diceui |
-| E-commerce | @shadcn, @reui, @blocks |
-| Portfolio | Magic UI, @animate-ui, Cult UI |
-| Enterprise app | @diceui, JollyUI, @shadcn |
+**Search terms:** `icon`, `animated-icon`, `lucide`
 
 ---
 
-## Adding Registries to Your Project
+## Quick-Pick by Project Type
 
-### Via components.json
+| Building… | Start with |
+|---|---|
+| SaaS dashboard | `@shadcn`, `@blocks`, `@reui` |
+| Marketing site | Tailark, Aceternity, Magic UI |
+| AI application | AI Elements, assistant-ui, `@animate-ui` |
+| Admin panel | `@reui`, `@blocks`, `@diceui` |
+| E-commerce | `@shadcn`, `@blocks`, `@reui` |
+| Portfolio | Aceternity, Magic UI, Cult UI |
+| Enterprise app | `@diceui`, JollyUI, `@shadcn` |
+| Voice / audio app | ElevenLabs UI, `@shadcn` |
+
+---
+
+## Configuring Registries
+
+Since shadcn CLI 3.0, registries are declared with namespaces in `components.json` using a `{name}` URL template:
 
 ```json
 {
   "registries": {
-    "animate-ui": "https://animate-ui.com/r",
-    "magic-ui": "https://magicui.design/r",
-    "reui": "https://reui.dev/r"
+    "@animate-ui": "https://animate-ui.com/r/{name}.json",
+    "@aceternity": "https://ui.aceternity.com/registry/{name}.json",
+    "@reui": "https://reui.io/r/{name}.json",
+    "@magicui": "https://magicui.design/r/{name}.json"
   }
 }
 ```
 
-### Via CLI
+For each registry, check the registry's own docs for the exact URL — templates occasionally differ. Once registered, install with `npx shadcn@latest add @namespace/component-name`.
 
-```bash
-# View available items in a registry
-npx shadcn@latest view @registry-name
+### Authenticated Registries
 
-# Add from a registry
-npx shadcn@latest add @registry-name/component-name
+Paid or private registries take a config object with headers:
+
+```json
+{
+  "registries": {
+    "@shadcnblocks": {
+      "url": "https://shadcnblocks.com/r/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${SHADCNBLOCKS_API_KEY}"
+      }
+    }
+  }
+}
 ```
+
+The `${ENV_VAR}` syntax reads from the environment at CLI/MCP invocation time. Never commit raw tokens.
 
 ---
 
-## Quick Reference: Popular Components
+## Discovery Commands (CLI)
 
-### Most Searched
+shadcn CLI ships search and discovery commands that complement MCP-based discovery:
 
-| Need | Component | Registry |
-|------|-----------|----------|
-| Animated tabs | components-animate-tabs | @animate-ui |
-| Data table | data-grid-table | @reui |
-| File upload | file-upload | @reui |
-| Date picker | calendar, date-picker | @shadcn |
-| Command palette | command | @shadcn |
-| Sidebar | sidebar | @shadcn, @blocks |
-| Toast notifications | sonner, toast | @shadcn |
-| Charts | chart | @shadcn |
-| Carousel | carousel | @shadcn, @animate-ui |
-| Modal/Dialog | dialog, alert-dialog | @shadcn, @animate-ui |
+```bash
+# Search configured registries
+npx shadcn@latest search "data table"
 
-### Hidden Gems
+# Preview a component before installing
+npx shadcn@latest view @reui/data-grid-table
 
-| Component | What it does | Registry |
-|-----------|--------------|----------|
-| preview-link-card | Link preview on hover | @animate-ui |
-| components-backgrounds-* | Animated backgrounds | @animate-ui |
-| data-grid-table-dnd | Drag-drop table rows | @reui |
-| components-animate-cursor | Custom cursor effects | @animate-ui |
-| gravity-stars | Animated star background | @animate-ui |
+# List everything in a registry
+npx shadcn@latest list @animate-ui
+
+# Get documentation and examples for an installed component
+npx shadcn@latest docs combobox
+```
 
 ---
 
 ## Browsing Registries Manually
 
-If shadcn MCP is not available, browse these discovery sites:
+When the MCP or CLI isn't available (or the user wants to browse visually):
 
-- **[registry.directory](https://registry.directory)** - Aggregated registry browser
-- **[shadcnregistry.com](https://shadcnregistry.com)** - Searchable component index
-- **[shadcn.io/awesome](https://www.shadcn.io/awesome)** - Curated resource list
-- **[ui.shadcn.com/blocks](https://ui.shadcn.com/blocks)** - Official blocks
+- **[shadcn.io/awesome/registries](https://www.shadcn.io/awesome/registries)** — Canonical aggregator, maintained alongside the docs
+- **[registry.directory](https://registry.directory)** — Third-party registry browser
+- **[shadcnregistry.com](https://shadcnregistry.com)** — Searchable component index across registries
+- **[ui.shadcn.com/blocks](https://ui.shadcn.com/blocks)** — Official blocks gallery
+
+Each registry's own site typically has demos and copy-pasteable snippets.
 
 ---
 
-*Last updated: February 2025*
+## Notes on Registry Health
+
+Registry quality and maintenance varies. When recommending a registry, favor:
+
+- Registries referenced on the official shadcn.io/awesome list (signals active maintenance)
+- Registries with clear `{name}.json` URL schemas (signals MCP/CLI compatibility)
+- Registries with demos and example code (signals commitment to usability)
+
+Avoid recommending registries without recent updates, without clear documentation, or with broken install flows. When in doubt, fall back to `@shadcn` + `@blocks` + build custom.

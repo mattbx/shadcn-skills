@@ -1,389 +1,245 @@
 # Component Review Checklist
 
-Detailed checklist for reviewing components against shadcn design patterns and theme conventions.
+Expanded audit checklist organized by category. Use as a structured reference during review — items are grouped as **Canon** (shadcn's explicit conventions) vs **Project** (common patterns that vary by team/style).
 
-## Quick Audit
+## Quick Audit (10-second pass)
 
-Run through this checklist for every component:
+For simple reviews, run through this minimal checklist:
 
-- [ ] Spacing uses `gap-*` in flex containers
-- [ ] Spacing follows Tailwind scale (2, 4, 6, 8)
-- [ ] Responsive spacing uses `gap-X md:gap-Y` pattern
-- [ ] `data-slot` attributes present on main elements
-- [ ] No hardcoded colors (check for `neutral-*`, `gray-*`)
-- [ ] Semantic design tokens used (`text-foreground`, `bg-muted`, etc.)
-- [ ] Component is composable and reusable
-- [ ] Mobile-first responsive design
-- [ ] Proper component structure (Header, Content, Footer pattern)
+- [ ] Uses `gap-*` in flex/grid containers (not `space-y-*`, `space-x-*`, or child margins)
+- [ ] Uses Tailwind scale values (no `gap-3`, `gap-5`, `gap-7`, `gap-[13px]`)
+- [ ] Uses `size-*` when width equals height (`size-10` not `w-10 h-10`)
+- [ ] Uses semantic color tokens (`text-muted-foreground`, not `text-neutral-500`)
+- [ ] Has `data-slot` attributes on semantic sub-elements
+- [ ] Accepts `className` merged via `cn()`
+- [ ] Uses theme-variable-backed radius (`rounded-md`, not `rounded-[20px]`)
+- [ ] Focus-visible states present on interactive elements
+- [ ] Mobile-first spacing (`gap-X md:gap-Y`, not just `gap-Y`)
 
-## Detailed Review Sections
+## Detailed Review
 
-### 1. Spacing Audit
+### 1. Structure & Composition
 
-#### Flex/Grid Container Spacing
+**Canon:**
 
-- [ ] Uses `gap-*` instead of `space-y-*` or margins
-- [ ] Spacing values follow Tailwind scale (multiples of 4px)
-- [ ] No hardcoded spacing values (3px, 5px, 7px, etc.)
-- [ ] Responsive spacing uses `gap-X md:gap-Y` pattern
+- [ ] Main wrapper has `data-slot="<component-name>"`
+- [ ] Sub-components have semantic `data-slot` values (`data-slot="card-header"`, etc.)
+- [ ] Composes existing primitives rather than forking `@/components/ui/*`
+- [ ] Uses `asChild` / `Slot` pattern when delegating rendering (Radix) or the equivalent base-ui pattern
+- [ ] Forwards refs where relevant (e.g. when used in forms, tooltips, popovers)
 
-**Check for:**
-```tsx
-// ✅ Good
-<div className="flex flex-col gap-4 md:gap-6">
+**Project:**
 
-// ❌ Bad
-<div className="flex flex-col space-y-4">
-<div className="flex flex-col gap-3">  // Non-standard value
-```
+- [ ] Sub-component naming follows project convention (`Card.Header` vs `CardHeader` — both are valid, but a project should pick one)
+- [ ] File location matches project's ui vs components structure
 
-#### Internal Component Spacing
+### 2. Spacing Audit
 
-- [ ] Header sections use `gap-2` (8px) for heading/description
-- [ ] Button internal spacing uses `gap-1` or `gap-1.5` (4-6px)
-- [ ] Card sections use `gap-6` default, `gap-4` small, `gap-2` compact
-- [ ] Consistent spacing within similar components
+**Canon:**
 
-**Check for:**
-```tsx
-// ✅ Good
-<div className="flex flex-col gap-2">
-  <h1>Heading</h1>
-  <p>Description</p>
-</div>
+- [ ] `gap-*` in flex/grid, never `space-y-*`/`space-x-*` or child margins
+- [ ] Tailwind spacing scale values only (1, 1.5, 2, 4, 6, 8, 10, 12, 16 — not 3, 5, 7)
+- [ ] No arbitrary pixel values unless genuinely necessary (`gap-[13px]` is a smell)
+- [ ] Responsive pattern: `gap-X md:gap-Y` (smaller mobile, larger desktop)
+- [ ] Padding follows standard Tailwind scale
+- [ ] `size-*` when width = height
 
-// ❌ Bad
-<div className="flex flex-col">
-  <h1>Heading</h1>
-  <p className="mt-1">Description</p>  // Using margin instead of gap
-</div>
-```
+**Project (varies by visual style — see [theme-styles.md](theme-styles.md)):**
 
-#### Container Padding
-
-- [ ] Padding uses standard Tailwind values
-- [ ] Responsive padding where appropriate (`px-4 md:px-6`)
-- [ ] Consistent padding across similar components
-
-### 2. Component Structure
-
-#### data-slot Attributes
-
-- [ ] Main component wrapper has `data-slot="component-name"`
-- [ ] Sub-components have appropriate `data-slot` attributes
-- [ ] `data-slot` values are semantic and descriptive
-
-**Check for:**
-```tsx
-// ✅ Good
-<div data-slot="page-content">
-  <div data-slot="page-content-header">
-  <div data-slot="page-content-block">
-
-// ❌ Bad
-<div>  // Missing data-slot
-  <div>  // Missing data-slot
-```
-
-#### Component Composition
-
-- [ ] Uses composition over modification
-- [ ] Doesn't modify `src/ui/*` components directly
-- [ ] Sub-components follow naming pattern (`ComponentName.Header`, etc.)
-- [ ] Clear separation of concerns
-
-**Check for:**
-```tsx
-// ✅ Good: Composing components
-<Card>
-  <CardHeader>
-    <CardTitle>Title</CardTitle>
-  </CardHeader>
-</Card>
-
-// ❌ Bad: Modifying base component
-// Editing src/ui/card.tsx directly
-```
-
-#### Layout Structure
-
-- [ ] Uses flex or grid appropriately
-- [ ] `min-w-0` on flex children to prevent overflow
-- [ ] Proper flex direction (`flex-col` vs `flex-row`)
-- [ ] Responsive layout changes use breakpoints
+- [ ] Section/card padding matches project's style density (Vega `p-6`, Nova `p-4`, Mira `p-3`, etc.)
+- [ ] Internal gaps match project's style (Maia tends generous, Mira tends dense)
 
 ### 3. Design Tokens
 
-#### Color Tokens
+**Canon (no exceptions):**
 
-- [ ] No hardcoded colors (`neutral-*`, `gray-*`, `slate-*`)
-- [ ] Uses semantic tokens (`text-foreground`, `text-muted-foreground`)
-- [ ] Background tokens (`bg-card`, `bg-muted`, `bg-accent`)
-- [ ] Border tokens (`border-border`, `border-border-strong`)
+- [ ] No hardcoded Tailwind color scales: `neutral-*`, `gray-*`, `slate-*`, `zinc-*`, `stone-*`
+- [ ] Text colors: `text-foreground`, `text-muted-foreground`, `text-primary`, `text-destructive`, `text-accent-foreground`, etc.
+- [ ] Background colors: `bg-background`, `bg-card`, `bg-muted`, `bg-accent`, `bg-primary`, `bg-destructive`, etc.
+- [ ] Borders: `border-border`, `border-input`, `border-ring`
+- [ ] Ring: `ring-ring` (usually combined with `focus-visible:ring-*`)
+- [ ] Radius via theme variable (`rounded-md`, `rounded-lg`) not hardcoded values
 
-**Check with:**
+**Quick scan:**
+
 ```bash
-grep -r "neutral-\|gray-\|slate-" [component-file]
+# Flag any hardcoded Tailwind color scale usage in the file
+grep -rE '\b(neutral|gray|slate|zinc|stone)-[0-9]{2,3}\b' <path>
+
+# Flag hardcoded radius values
+grep -rE 'rounded-\[' <path>
 ```
-
-**Check for:**
-```tsx
-// ✅ Good
-<p className="text-muted-foreground">Description</p>
-<div className="bg-muted hover:bg-accent">
-
-// ❌ Bad
-<p className="text-neutral-500">Description</p>
-<div className="bg-gray-100 hover:bg-gray-200">
-```
-
-#### Typography Tokens
-
-- [ ] Uses semantic text colors (`text-foreground`, `text-muted-foreground`)
-- [ ] Proper font weights (`font-medium`, `font-semibold`)
-- [ ] Responsive text sizes (`text-xl md:text-2xl`)
 
 ### 4. Composability
 
-#### Reusability
+**Canon:**
 
-- [ ] Component can be used in multiple contexts
-- [ ] Not tightly coupled to specific use case
-- [ ] Clear prop interface
-- [ ] Default values provided where appropriate
+- [ ] Takes a `className` prop, merged via `cn()` at the end
+- [ ] CVA used for variants when variation is likely (`variant`, `size`)
+- [ ] Doesn't hardcode content strings — accepts `children` or content-shaped props
+- [ ] Variants expose sensible defaults via `defaultVariants`
+- [ ] Props are properly typed (uses `VariantProps<typeof xVariants>` for CVA)
 
-#### Customization
+**Project:**
 
-- [ ] Variants supported via props (`variant`, `size`)
-- [ ] Customizable via `className` prop
-- [ ] Slot-based composition (children, content blocks)
-- [ ] Doesn't require modification for different use cases
-
-**Check for:**
-```tsx
-// ✅ Good: Flexible and composable
-<PageContent
-  heading="Title"
-  description="Description"
-  contentBlock={<Tabs />}
-  contentBlockSpacing="md"
->
-  <DataTable />
-</PageContent>
-
-// ❌ Bad: Too specific, not reusable
-<WorkflowPageContent />  // Only works for workflows
-```
-
-#### Sub-Components
-
-- [ ] Sub-components exported for advanced usage
-- [ ] Sub-components follow naming pattern
-- [ ] Sub-components are properly typed
+- [ ] Prop naming follows project convention
+- [ ] Component can be reused across at least two different contexts
 
 ### 5. Responsive Design
 
-#### Mobile-First Approach
+**Canon:**
 
-- [ ] Designed for mobile (< 768px) first
-- [ ] Progressive enhancement for larger screens
-- [ ] Uses `md:` breakpoint appropriately
-- [ ] Uses `lg:` breakpoint when needed
-
-#### Breakpoints
-
-- [ ] Breakpoints used consistently
-- [ ] Responsive spacing (`gap-4 md:gap-6`)
-- [ ] Responsive typography (`text-xl md:text-2xl`)
-- [ ] Responsive layout changes (`flex-col md:flex-row`)
-
-#### Touch Targets
-
-- [ ] Interactive elements minimum 44px (11 Tailwind units)
-- [ ] Adequate spacing between touch targets
-- [ ] Mobile-friendly interactions
-
-#### Content Overflow
-
-- [ ] Uses `min-w-0` on flex children
-- [ ] Proper text truncation where needed
-- [ ] Horizontal scroll handled appropriately
-- [ ] Content doesn't overflow containers
+- [ ] Mobile-first baseline — designed for < 768px first, enhanced at `md:` and `lg:`
+- [ ] Responsive spacing uses `gap-X md:gap-Y` (not pure desktop-first)
+- [ ] Responsive typography uses `text-base md:text-lg` etc.
+- [ ] Interactive elements have minimum ~44px touch target on mobile
+- [ ] `min-w-0` on flex children that contain text (prevents overflow)
+- [ ] Long text uses `truncate` or `line-clamp-*` where appropriate
 
 ### 6. Accessibility
 
-#### Semantic HTML
+**Canon:**
 
-- [ ] Proper HTML elements used (`h1`, `p`, `button`, etc.)
-- [ ] ARIA attributes where needed
-- [ ] Proper heading hierarchy
+- [ ] Uses semantic HTML (buttons are `<button>`, headings are `<h1>`–`<h6>`, not styled `<div>`s)
+- [ ] Interactive elements have visible `focus-visible:` states (ring or border change)
+- [ ] Form elements paired with `<Label>` via `htmlFor` / `id`
+- [ ] ARIA attributes where semantic HTML isn't enough (`aria-label`, `aria-describedby`, `aria-invalid`)
+- [ ] Icon-only buttons have accessible names (`aria-label` or `sr-only` text)
+- [ ] Decorative icons marked `aria-hidden` or otherwise hidden from AT
+- [ ] Motion uses `motion-safe:` / respects `prefers-reduced-motion`
 
-#### Focus States
+**Project:**
 
-- [ ] Visible focus indicators
-- [ ] Keyboard navigation works
-- [ ] Focus management in modals/dialogs
+- [ ] Keyboard navigation tested (Tab, Enter, Escape, arrow keys per component type)
+- [ ] Color contrast meets project's accessibility target (WCAG AA minimum)
 
-#### Screen Reader Support
+### 7. Animation (if present)
 
-- [ ] Proper labels and descriptions
-- [ ] ARIA labels where needed
-- [ ] Hidden decorative elements properly marked
+**Canon:**
 
-### 7. Performance
+- [ ] Transitions specify what's transitioning (`transition-colors`, `transition-transform`) not `transition-all`
+- [ ] Durations are standard (150ms fast, 200ms normal, 300ms slow — not 500ms+ for UI interactions)
+- [ ] Transform and opacity preferred over width/height for performance
+- [ ] Radix `data-state` used for enter/exit animations on primitive components
+- [ ] `motion-safe:` prefix on transform-based animations
 
-#### Rendering
+See [animation-patterns.md](animation-patterns.md) for detail.
 
-- [ ] No unnecessary re-renders
-- [ ] Proper use of `React.memo` where appropriate
-- [ ] Efficient conditional rendering
+## Output Format for Reviews
 
-#### Bundle Size
+Structured, scannable, actionable:
 
-- [ ] No unnecessary dependencies
-- [ ] Tree-shakeable imports
-- [ ] Minimal runtime overhead
+```markdown
+## Review: `<ComponentName />`
 
-## Review Workflow
+**Structure** ✅ `data-slot` present, composes Card primitive
+**Spacing** ⚠️ Uses `space-y-4` in flex container (line 18)
+**Tokens** ❌ Hardcoded `text-neutral-500` (line 24)
+**Composability** ✅ Accepts className, variant props via CVA
+**Responsive/a11y** ⚠️ Missing `min-w-0` on flex child (line 14)
 
-### Step 1: Visual Inspection
+**Fixes:**
+- Line 18: `flex flex-col space-y-4` → `flex flex-col gap-4`
+- Line 24: `text-neutral-500` → `text-muted-foreground`
+- Line 14: add `min-w-0` to the wrapping `<div>`
 
-1. Open component in browser
-2. Test at breakpoints (375px, 768px, 1280px)
-3. Check spacing visually
-4. Verify responsive behavior
+Want me to apply these?
+```
 
-### Step 2: Code Review
+### Severity Marks
 
-1. Check spacing patterns (`gap-*` usage)
-2. Verify `data-slot` attributes
-3. Check for hardcoded colors
-4. Review component structure
-5. Verify composability
+- ✅ Passes / no action needed
+- ⚠️ Suggestion — not wrong per se, but would improve the component
+- ❌ Blocking — violates shadcn canon; fix before merging
 
-### Step 3: Comparison
-
-1. Compare with similar shadcn components
-2. Check against Maia theme examples
-3. Verify alignment with project patterns
-4. Review against checklist above
-
-### Step 4: Documentation
-
-1. Document any deviations from patterns
-2. Note any customizations needed
-3. Update component documentation
-4. Add examples if needed
+When nothing is worth flagging, a single ✅ summary line is fine. Don't manufacture issues to fill the template.
 
 ## Common Issues and Fixes
 
-### Issue: Using `space-y-*` in Flex Container
+### `space-y-*` or child margins in flex containers
 
-**Fix:**
 ```tsx
-// Before
+// ❌
 <div className="flex flex-col space-y-4">
+<div className="flex flex-col">
+  <div className="mb-4">...</div>
+</div>
 
-// After
+// ✅
 <div className="flex flex-col gap-4">
 ```
 
-### Issue: Hardcoded Colors
+### Hardcoded Tailwind color scale
 
-**Fix:**
 ```tsx
-// Before
-<p className="text-neutral-500">Description</p>
+// ❌
+<p className="text-neutral-500">
+<div className="bg-gray-100 hover:bg-gray-200">
 
-// After
-<p className="text-muted-foreground">Description</p>
+// ✅
+<p className="text-muted-foreground">
+<div className="bg-muted hover:bg-accent">
 ```
 
-### Issue: Missing `data-slot` Attributes
+### Duplicate width/height
 
-**Fix:**
 ```tsx
-// Before
+// ❌
+<div className="w-10 h-10 rounded-full" />
+
+// ✅
+<div className="size-10 rounded-full" />
+```
+
+### Missing `data-slot` attributes
+
+```tsx
+// ❌
 <div className="flex flex-col gap-4">
   <div>Header</div>
+  <div>Content</div>
 </div>
 
-// After
-<div data-slot="component-name" className="flex flex-col gap-4">
-  <div data-slot="component-header">Header</div>
+// ✅
+<div data-slot="panel" className="flex flex-col gap-4">
+  <div data-slot="panel-header">Header</div>
+  <div data-slot="panel-content">Content</div>
 </div>
 ```
 
-### Issue: Inconsistent Spacing
+### Arbitrary radius values
 
-**Fix:**
 ```tsx
-// Before
-<div className="gap-3">  // Non-standard
-<div className="gap-5">  // Non-standard
+// ❌
+<Card className="rounded-[20px]">
 
-// After
-<div className="gap-2">  // Standard (8px)
-<div className="gap-4">  // Standard (16px)
+// ✅ (adapts to theme)
+<Card className="rounded-xl">
+<Card className="rounded-lg">
 ```
 
-### Issue: Missing Responsive Spacing
+### Missing `min-w-0` on flex children with text
 
-**Fix:**
 ```tsx
-// Before
-<div className="gap-6">
+// ❌ (text may overflow container on narrow screens)
+<div className="flex gap-2">
+  <div className="flex-1">
+    <p>Long text that might overflow...</p>
+  </div>
+</div>
 
-// After
-<div className="gap-4 md:gap-6">
+// ✅
+<div className="flex gap-2">
+  <div className="flex-1 min-w-0">
+    <p className="truncate">Long text that might overflow...</p>
+  </div>
+</div>
 ```
 
-## Review Checklist Template
+## Related References
 
-Copy this template for each component review:
-
-```markdown
-## Component: [ComponentName]
-
-### Spacing
-- [ ] Uses `gap-*` in flex containers
-- [ ] Follows Tailwind spacing scale
-- [ ] Responsive spacing implemented
-- [ ] Consistent spacing values
-
-### Structure
-- [ ] `data-slot` attributes present
-- [ ] Proper component composition
-- [ ] Sub-components follow pattern
-
-### Design Tokens
-- [ ] No hardcoded colors
-- [ ] Semantic tokens used
-- [ ] Proper typography tokens
-
-### Composability
-- [ ] Reusable across contexts
-- [ ] Prop-based customization
-- [ ] Slot-based composition
-
-### Responsive
-- [ ] Mobile-first approach
-- [ ] Proper breakpoints
-- [ ] Touch targets adequate
-- [ ] Content overflow handled
-
-### Issues Found
-1. [Issue description]
-2. [Issue description]
-
-### Fixes Applied
-1. [Fix description]
-2. [Fix description]
-```
-
-## Additional Resources
-
-- **Main Skill**: See [../SKILL.md](../SKILL.md) for overview
-- **Theme Styles**: See [theme-styles.md](theme-styles.md) for spacing patterns by theme
-- **Animation Patterns**: See [animation-patterns.md](animation-patterns.md) for motion guidelines
-- **shadcn Theming Docs**: https://ui.shadcn.com/docs/theming
+- **Main skill:** [../SKILL.md](../SKILL.md)
+- **Theme styles (per-style patterns):** [theme-styles.md](theme-styles.md)
+- **Animation patterns:** [animation-patterns.md](animation-patterns.md)
+- **shadcn theming docs:** [ui.shadcn.com/docs/theming](https://ui.shadcn.com/docs/theming)
+- **Live component reference:** `npx shadcn@latest docs <component>`

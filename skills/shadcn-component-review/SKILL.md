@@ -1,328 +1,241 @@
 ---
 name: shadcn-component-review
-description: Review custom components and layouts against shadcn design patterns, theme styles (Maia, Vega, Lyra, Nova, Mira), component structure, composability, and Radix UI best practices. Use when planning new components, reviewing existing components, auditing spacing, checking component structure, or verifying shadcn best practices alignment.
+description: Review custom components and layouts against shadcn design patterns, visual style conventions (Vega, Nova, Maia, Lyra, Mira), composition rules, design token usage, and Radix/Base UI composition patterns. Use PROACTIVELY after writing or modifying any custom UI component, page layout, or variant of a shadcn component. Use when the user says "review this component", "check my spacing", "does this follow shadcn patterns", "audit this layout", "is this shadcn-idiomatic", or shares a component for feedback. Catches spacing drift, hardcoded colors, missing data-slot attributes, inconsistent theme application, and composition anti-patterns that shipping-fast-with-AI tools often miss.
 ---
 
 # shadcn Component Review
 
-Systematic review process for ensuring custom components and layouts align with shadcn design patterns, official theme styles, and Radix UI best practices.
+Systematic audit process for ensuring custom components align with shadcn design patterns, the project's chosen visual style, and modern composition conventions.
 
-## Quick Start
+## How This Complements the Official shadcn Skill
 
-### Planning Phase (Preventive)
+The official `shadcn` skill (shipped with CLI v4) enforces rules at *generation time* — telling agents "use `gap-*` not `space-y-*`, use semantic colors, use `size-*` for equal width/height," and so on. That's correct behavior when writing new code.
 
-Before building a component:
+This skill is for *post-hoc audit* — reviewing components that already exist (written by Claude, by a teammate, by a previous iteration) against those same rules *plus* the visual-style-specific patterns that vary by theme (Vega spacing differs from Maia differs from Mira). When the two skills both apply, the official handles forward-generation and this one handles retrospective review. They don't conflict — they check the same rules from different directions.
 
-1. **Check existing patterns**: Review similar components in `src/ui/` and `src/components/`
-2. **Reference your theme style**: See [references/theme-styles.md](references/theme-styles.md) for spacing/shape patterns
-3. **Use shadcn MCP** (if available): Query components via shadcn MCP server
-4. **Review checklist**: Use [references/review-checklist.md](references/review-checklist.md) as planning guide
+## Core Principle
 
-### Review Phase (Post-Build)
+Reviews catch drift. Even with the official skill enforcing rules during generation, components drift over time: someone copies from an older project, an LLM suggests `space-y-4` and nobody catches it, a component was built before the project standardized on Maia, or a contributor uses Tailwind's color scale instead of semantic tokens. This skill finds those issues systematically.
 
-After building a component:
+## When to Trigger
 
-1. **Run spacing audit**: Check against your theme's spacing patterns
-2. **Verify structure**: Ensure proper use of `data-slot` attributes and composition
-3. **Check design tokens**: Verify semantic tokens only (no hardcoded colors)
-4. **Test composability**: Ensure component can be reused and customized via props
-5. **Validate responsive**: Test mobile-first approach and breakpoints
+**Proactive triggers** (activate after components are written):
 
-## Core Review Areas
+- Claude just finished writing or modifying a custom component
+- User says "I built this" and pastes a component
+- User asks to add styling to an existing element
+- User is iterating on a layout
 
-### 1. Spacing (Theme-Dependent)
+**Explicit triggers** (user directly requests review):
 
-Use `gap-*` for flex/grid containers. Spacing varies by theme style:
+- "Review this component"
+- "Check my spacing"
+- "Is this shadcn-idiomatic?"
+- "Does this follow the patterns?"
+- "Audit this layout"
 
-| Theme | Spacing | Shape |
-|-------|---------|-------|
-| **Vega** | Standard | Classic shadcn |
-| **Nova** | Compact | Reduced padding/margins |
-| **Maia** | Generous | Soft, rounded |
-| **Lyra** | Standard | Boxy, sharp |
-| **Mira** | Dense | Compact interfaces |
+## Before Reviewing: Project Context
 
-See [references/theme-styles.md](references/theme-styles.md) for theme-specific patterns.
+Before applying theme-specific patterns, understand the project. If the shadcn CLI is available, run:
 
-### 2. Component Structure
-
-- Use `data-slot` attributes: `data-slot="component-name"`
-- Sub-components: `ComponentName.Header`, `ComponentName.Content`
-- Composition over modification (never edit `src/ui/*` directly)
-
-### 3. Design Tokens
-
-Semantic tokens only - **never** hardcoded colors:
-
-```tsx
-// ✅ text-muted-foreground, bg-muted, hover:bg-accent
-// ❌ text-neutral-500, bg-gray-100, hover:bg-neutral-50
+```bash
+npx shadcn@latest info --json
 ```
 
-### 4. Composability
+This returns: framework (Next.js / Vite / etc.), Tailwind version, base library (`radix` or `base`), installed components, icon library, resolved file paths, and the current style. Use this output to:
 
-- Prop-based customization (variants, sizes)
-- Slot-based composition (children, content blocks)
-- Single responsibility, clear interface
+- Match spacing/shape expectations to the project's visual style
+- Apply the correct composition pattern for the primitive base (Radix vs Base UI — APIs differ)
+- Know which components are already installed vs suggesting installs
 
-### 5. Responsive Design
+If the CLI isn't available, infer from `components.json` directly, or ask the user: "Which visual style is this project using — Vega, Nova, Maia, Lyra, or Mira?"
 
-- Mobile-first (< 768px base)
-- Breakpoints: `md:` (768px+), `lg:` (1024px+)
-- Touch targets: min 44px
-- Flex children: `min-w-0` to prevent overflow
+## Review Workflow
 
-See [references/review-checklist.md](references/review-checklist.md) for detailed checklists.
+### Step 1: Structure & Composition
+
+Check the component is structured using shadcn conventions.
+
+**`data-slot` attributes.** Every semantic element within a component should carry a `data-slot` attribute naming its role. This enables styling hooks, testing selectors, and consistent theming. Confirmed current pattern in shadcn source (e.g. `<button data-slot="button" data-variant={variant} data-size={size}>`).
+
+**Composition, not modification.** Custom components should compose primitives from `@/components/ui/*`, not fork and modify them. If a primitive needs different behavior, wrap it; don't edit the source.
+
+**Primitive base awareness.** If the project uses Radix (`--base radix`), expect `asChild` and `Slot` patterns, Radix data-state attributes. If Base UI (`--base base`), expect different composition APIs. Reference the current docs for the installed primitive: `npx shadcn@latest docs <component>`.
+
+### Step 2: Spacing Audit
+
+Spacing is where most drift happens. Check against the project's visual style — see [references/theme-styles.md](references/theme-styles.md) for per-style patterns.
+
+**Universal rules (apply to all themes):**
+
+- Use `gap-*` in flex/grid containers, never `space-y-*` / `space-x-*` or margins
+- Use Tailwind's standard spacing scale (multiples of 4px: 1, 1.5, 2, 4, 6, 8 — avoid 3, 5, 7)
+- Use `size-*` when width and height are equal (`size-10` not `w-10 h-10`)
+- Responsive spacing uses `gap-X md:gap-Y` pattern
+
+**Style-specific rules:** density and radius expectations differ by style. Reference [references/theme-styles.md](references/theme-styles.md) for the specifics.
+
+### Step 3: Design Tokens
+
+Verify semantic tokens only — no hardcoded Tailwind color scale values.
+
+| Category | Use | Avoid |
+|---|---|---|
+| Text color | `text-foreground`, `text-muted-foreground`, `text-primary` | `text-neutral-500`, `text-gray-900`, `text-slate-700` |
+| Background | `bg-background`, `bg-card`, `bg-muted`, `bg-accent` | `bg-gray-100`, `bg-white`, `bg-neutral-50` |
+| Border | `border-border`, `border-input` | `border-gray-200`, `border-neutral-300` |
+| Border radius | `rounded-md`, `rounded-lg` (uses `--radius`) | `rounded-[20px]`, `rounded-[8px]` |
+
+Quick grep to flag hardcoded colors:
+
+```bash
+grep -rE '\b(neutral|gray|slate|zinc|stone)-[0-9]{2,3}\b' <path>
+```
+
+### Step 4: Composability
+
+Check the component can be reused without modification.
+
+- Takes a `className` prop merged via `cn()`
+- Exposes variants via CVA where variation is likely
+- Doesn't hardcode content; accepts `children` or content-shaped props
+- Isn't tightly coupled to a specific data model or route
+
+### Step 5: Responsive & Accessibility
+
+- Mobile-first baseline (< 768px design), progressive enhancement via `md:`, `lg:`
+- Touch targets minimum ~44px on interactive elements
+- `min-w-0` on flex children to prevent overflow
+- Semantic HTML (buttons are `<button>`, not styled `<div>`)
+- Focus-visible states present (`focus-visible:ring-*`, `focus-visible:border-*`)
+- Motion respects `motion-safe:` / `prefers-reduced-motion`
+
+See [references/review-checklist.md](references/review-checklist.md) for the expanded checklist.
 
 ## Foundational Patterns
 
 ### CVA (Class Variance Authority)
 
-shadcn components use CVA for type-safe, declarative variants:
+Variants are declared via `cva()`, typed via `VariantProps`:
 
 ```tsx
 import { cva, type VariantProps } from "class-variance-authority"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center font-medium transition-colors",
+  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        outline: "border border-input bg-background hover:bg-accent",
+        outline: "border bg-background hover:bg-accent",
       },
       size: {
         default: "h-9 px-4 py-2",
-        sm: "h-8 px-3 text-sm",
+        sm: "h-8 px-3 text-xs",
       },
     },
     defaultVariants: { variant: "default", size: "default" },
   }
 )
 
-interface ButtonProps extends VariantProps<typeof buttonVariants> {}
+type ButtonProps = React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>
 ```
 
-**Key points:**
-- Base styles in first argument (always applied)
-- Variants as declarative object
-- Type-safe props via `VariantProps`
-- Extend with new variants, don't modify base
+Extend with new variants; don't modify the base layer.
 
 ### cn() Utility
 
-Always use `cn()` for conditional and override classes:
+Combines `clsx` (conditionals) + `tailwind-merge` (conflict resolution). Always use for className composition:
 
 ```tsx
 import { cn } from "@/lib/utils"
 
-// Combines clsx (conditionals) + tailwind-merge (conflict resolution)
 <div className={cn(
   "base-classes",
   isActive && "active-classes",
-  className // allows consumer overrides
+  className // consumer overrides win
 )} />
 ```
 
-**Why it matters:**
-- Prevents CSS cascade conflicts
-- Enables prop-based class overrides
-- Handles conditional classes cleanly
-
 ### Theme-Aware Styling
 
-shadcn themes use CSS variables for consistent styling across components.
+shadcn themes use CSS variables (OKLCH-based since 2025). Key variables: `--radius`, `--background`, `--foreground`, `--primary`, `--secondary`, `--accent`, `--muted`, `--card`, `--popover`, `--destructive`, `--border`, `--input`, `--ring`.
 
-**Border radius** is theme-defined via `--radius`:
+Use Tailwind's semantic class names that map to these (`rounded-md` → `--radius`, `bg-primary` → `--primary`) rather than hardcoded values.
 
-```tsx
-// ✅ Uses theme radius (adapts to Maia rounded vs Lyra sharp)
-<Button className="rounded-md">  // Uses --radius variable
-<Card className="rounded-lg">
+### Animation
 
-// ❌ Hardcoded (ignores theme settings)
-<Button className="rounded-[20px]">
+Brief conventions:
+- Hover/focus/active: Tailwind transitions, 150ms
+- Color/state transitions: 200ms
+- Enter/exit of DOM elements: Tailwind `animate-in`/`animate-out` with Radix `data-state`, or Motion's `AnimatePresence`
+- Always respect `motion-safe:` for transform-based animations
+
+See [references/animation-patterns.md](references/animation-patterns.md) for the full guide.
+
+## Visual Styles Reference
+
+shadcn ships five official visual styles, configurable via `npx shadcn create` or via preset codes (CLI v4):
+
+| Style | Density | Shape | Canonical use |
+|---|---|---|---|
+| **Vega** | Standard | Classic | Default shadcn look |
+| **Nova** | Compact | Standard | Dense UIs, data-heavy apps |
+| **Maia** | Generous | Soft/rounded (often pill) | Consumer apps, friendly interfaces |
+| **Lyra** | Standard | Boxy/sharp | Developer tools, mono fonts |
+| **Mira** | Dense | Compact | Admin dashboards, power users |
+
+Each style affects spacing scale, border radius, and component dimensions. See [references/theme-styles.md](references/theme-styles.md) for per-style spacing patterns and common mistakes.
+
+**Presets** (new in CLI v4) pack style + theme + fonts + icons + radius into a single short code applied via `npx shadcn@latest apply --preset <code>`. When reviewing, check the project's preset if configured — it's the source of truth for many of these conventions.
+
+## Scope: What This Skill Does NOT Enforce
+
+Be explicit about the difference between shadcn canon and project-specific conventions. This skill reviews against shadcn canon. Project-specific conventions (e.g. "our team always uses `gap-4` between form fields") belong in the project's own style guide or a project-specific skill, not this one.
+
+When in doubt, cite the source: "shadcn components use `data-slot` — see the button source at `ui.shadcn.com/docs/components/button`" vs "your project consistently uses `gap-4` between form fields."
+
+## Output Format
+
+A good review:
+
+1. **Summarizes** what was reviewed in one line
+2. **Flags issues** grouped by category (structure, spacing, tokens, composability, responsive/a11y)
+3. **Severity-marks** each issue: ✅ passes, ⚠️ suggestion, ❌ blocking
+4. **Shows the fix** inline where the fix is short and obvious; references the relevant pattern file where the fix is nuanced
+5. **Offers to apply fixes** if the user wants
+
+Keep it scannable. Don't belabor passing items — a single ✅ summary line for what's good is enough.
+
+### Example Review Output
+
+```markdown
+## Review: `<PageHeader />`
+
+**Structure** ✅ `data-slot` present, composition clean
+**Spacing** ⚠️ Uses `space-y-4` in flex container — swap to `gap-4`
+**Tokens** ❌ `text-neutral-500` on line 12 — use `text-muted-foreground`
+**Composability** ✅ Accepts className, variant props via CVA
+**Responsive/a11y** ⚠️ Missing `min-w-0` on flex child (may overflow on narrow screens)
+
+Fixes:
+- Line 8: `space-y-4` → `gap-4`
+- Line 12: `text-neutral-500` → `text-muted-foreground`
+- Line 18: Add `min-w-0` to wrapping `<div>`
+
+Want me to apply these?
 ```
 
-**Theme CSS variables** (defined in your theme's CSS):
-- `--radius` - Base radius unit
-- `--background`, `--foreground` - Base colors
-- `--primary`, `--secondary`, `--accent` - Semantic colors
-- `--muted`, `--card`, `--popover` - Surface colors
+## Reference Files
 
-**Custom theme extensions**: If your project needs theme-switchable radius (e.g., pill vs sharp), create utility classes mapped to CSS variables:
-
-```css
-/* Example: Theme-switchable radius */
-.rounded-theme-button {
-  border-radius: var(--radius-button);
-}
-```
-
-### Animation Patterns
-
-Use consistent, subtle animations. See [references/animation-patterns.md](references/animation-patterns.md) for:
-- Timing standards (150ms fast, 200ms normal, 300ms slow)
-- Easing curves (ease-out for enter, ease-in for exit)
-- Radix `data-state` animation patterns
-- Framer Motion patterns for enter/exit
-- Accessibility (`motion-safe:` prefixes)
+- [references/theme-styles.md](references/theme-styles.md) — Per-style spacing, shape, and common mistakes
+- [references/review-checklist.md](references/review-checklist.md) — Expanded audit checklist by category
+- [references/animation-patterns.md](references/animation-patterns.md) — Timing, easing, Radix data-state, Motion patterns
 
 ## Resources
 
-### shadcn Documentation
-
-- **Components**: https://ui.shadcn.com/docs/components
-- **Blocks**: https://ui.shadcn.com/blocks
-- **Themes**: https://ui.shadcn.com/themes
-- **Theme Creator**: https://ui.shadcn.com/create
-
-### 2025 Updates
-
-**Visual Styles** (via `npx shadcn create`):
-- **Vega** - Classic shadcn/ui look
-- **Nova** - Compact layouts, reduced spacing
-- **Maia** - Soft and rounded, generous spacing
-- **Lyra** - Boxy and sharp, pairs with mono fonts
-- **Mira** - Dense interfaces
-
-**New utility components**:
-- `input-group` / `button-group` - Grouped controls
-- `empty` - Empty state patterns
-- `field` - Form field wrapper
-- `spinner` - Loading indicator
-
-**Technical updates**:
-- Full Tailwind v4 support (`@theme` directive)
-- OKLCH colors (from HSL)
-- React 19 compatibility
-
-### Community Tools
-
-- **tweakcn**: https://tweakcn.com/ - Interactive theme editor
-- **Shadcn Studio**: https://shadcnstudio.com/ - Theme generator
-- **Shadcn Themer**: https://shadcnthemer.com/ - Theme creator
-
-## Review Workflow
-
-### Step 1: Structure Review
-
-Check component structure against shadcn patterns:
-
-```tsx
-// ✅ Good: Proper structure with data-slot
-<div data-slot="component-name" className="flex flex-col gap-4">
-  <div data-slot="component-header" className="flex flex-col gap-2">
-    {/* Header content */}
-  </div>
-  <div data-slot="component-content">
-    {/* Main content */}
-  </div>
-</div>
-
-// ❌ Bad: Missing data-slot, inconsistent spacing
-<div className="space-y-4">
-  <div className="mb-2">
-    {/* Header content */}
-  </div>
-  <div>
-    {/* Main content */}
-  </div>
-</div>
-```
-
-### Step 2: Spacing Audit
-
-Verify spacing follows your theme's patterns:
-
-- Check all flex containers use `gap-*` not `space-y-*` or margins
-- Verify spacing values follow Tailwind scale (2, 4, 6, 8, etc.)
-- Ensure responsive spacing uses `gap-X md:gap-Y` pattern
-- Match spacing density to your theme (Maia=generous, Nova/Mira=compact)
-
-### Step 3: Design Token Check
-
-Verify semantic tokens only:
-
-```bash
-# Check for hardcoded colors
-grep -r "neutral-\|gray-\|slate-" [component-file]
-```
-
-### Step 4: Composability Review
-
-Ensure component can be:
-- Reused in other contexts
-- Customized via props (variants, sizes)
-- Composed with other components
-- Extended without modification
-
-### Step 5: Responsive Verification
-
-Test at breakpoints:
-- Mobile: 375px
-- Tablet: 768px
-- Desktop: 1280px
-
-## Examples
-
-### Good Component Pattern
-
-```tsx
-// ✅ Follows shadcn patterns
-export function PageContent({
-  heading,
-  description,
-  contentBlock,
-  children,
-}: PageContentProps) {
-  return (
-    <div
-      data-slot="page-content"
-      className="min-w-0 flex flex-col gap-4 md:gap-6"
-    >
-      <div data-slot="page-content-header" className="flex flex-col gap-2">
-        <h1 className="text-xl md:text-2xl tracking-tight font-semibold text-foreground">
-          {heading}
-        </h1>
-        {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
-        )}
-      </div>
-      {contentBlock && (
-        <div data-slot="page-content-block">{contentBlock}</div>
-      )}
-      {children}
-    </div>
-  );
-}
-```
-
-### Bad Component Pattern
-
-```tsx
-// ❌ Violates multiple patterns
-export function PageContent({ heading, description }: Props) {
-  return (
-    <div className="space-y-6">
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold text-gray-900">{heading}</h1>
-        <p className="mt-2 text-sm text-neutral-500">{description}</p>
-      </div>
-    </div>
-  );
-}
-```
-
-**Issues:**
-- Uses `space-y-*` instead of `gap-*`
-- Hardcoded colors (`text-gray-900`, `text-neutral-500`)
-- Missing `data-slot` attributes
-- Inconsistent spacing (`mb-4`, `mt-2` instead of flex gap)
-
-## Additional Resources
-
-- **Theme Styles**: [references/theme-styles.md](references/theme-styles.md)
-- **Review Checklist**: [references/review-checklist.md](references/review-checklist.md)
-- **Animation Patterns**: [references/animation-patterns.md](references/animation-patterns.md)
-- **V2 Enhancement Ideas**: [references/v2-notes.md](references/v2-notes.md)
+- **Official shadcn docs:** [ui.shadcn.com](https://ui.shadcn.com)
+- **Component reference (live):** `npx shadcn@latest docs <component>` — returns current doc and example URLs
+- **Project context:** `npx shadcn@latest info --json`
+- **Theme creator:** [ui.shadcn.com/create](https://ui.shadcn.com/create)
+- **TweakCN (interactive theme editor):** [tweakcn.com](https://tweakcn.com)
