@@ -65,6 +65,7 @@ Well-maintained registries that cover most project needs. Start here.
 
 | Registry | Focus | URL |
 |---|---|---|
+| @payload-components | Typed Payload CMS blocks with optional Pages, renderer, types, and admin import map wiring | [payload-components.xyz](https://www.payload-components.xyz) |
 | Tailark | Marketing-focused blocks | [tailark.com](https://tailark.com) |
 | Shadcnblocks | Premium block library with 1000+ blocks and templates (paid) | [shadcnblocks.com](https://shadcnblocks.com) |
 | Eldora UI | Landing page components | [eldoraui.com](https://eldoraui.com) |
@@ -151,6 +152,7 @@ Since shadcn CLI 3.0, registries are declared with namespaces in `components.jso
 ```json
 {
   "registries": {
+    "@payload-components": "https://www.payload-components.xyz/r/{name}.json",
     "@animate-ui": "https://animate-ui.com/r/{name}.json",
     "@aceternity": "https://ui.aceternity.com/registry/{name}.json",
     "@reui": "https://reui.io/r/{name}.json",
